@@ -1,28 +1,59 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div id="cesium"></div>
+    <PlotInfoPanel />
+    <PlotToolPanel />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import * as Cesium from "cesium";
+import "cesium/Build/Cesium/Widgets/widgets.css";
+import PlotInfoPanel from "./components/PlotInfoPanel";
+import PlotToolPanel from "./components/PlotToolPanel";
+import Plot from "./lib/Plot/index";
+import "./lib/Plot/css/index.css";
+
+let plot = null;
+let viewer = null;
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    PlotInfoPanel,
+    PlotToolPanel,
+  },
+  provide: {
+    plot: () => {
+      return plot;
+    },
+  },
+  data() {
+    return {};
+  },
+  mounted() {
+    viewer = new Cesium.Viewer("cesium", {
+      animation: false,
+      timeline: false,
+      navigationHelpButton: false,
+      scene3DOnly: true,
+      fullscreenButton: false,
+      geocoder: false,
+      homeButton: false,
+      baseLayerPicker: false,
+      infoBox: false,
+    });
+    plot = new Plot(viewer);
+  },
+};
 </script>
-
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+  margin: 0;
+  padding: 0;
+}
+#cesium {
+  width: 100%;
+  height: 100vh;
 }
 </style>
